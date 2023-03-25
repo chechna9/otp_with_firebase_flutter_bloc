@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mob_auth_fire_base/buisiness_logic/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:mob_auth_fire_base/constants/constants.dart';
 import 'package:mob_auth_fire_base/presentation/widgets/inputField.dart';
 
@@ -16,7 +18,9 @@ class SignUp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: const [
-              FlutterLogo(),
+              FlutterLogo(
+                size: 100,
+              ),
               Flexible(
                 child: SingleChildScrollView(
                   child: RegisterForm(),
