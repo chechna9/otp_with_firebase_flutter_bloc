@@ -22,16 +22,16 @@ class UserRepository {
         codeAutoRetrievalTimeout: autoRetrievalTimeout);
   }
 
-  Future<AuthResult> verifyAndLogin(
+  Future<UserCredential> verifyAndLogin(
       String verificationId, String smsCode) async {
-    AuthCredential authCredential = PhoneAuthProvider.getCredential(
+    AuthCredential authCredential = PhoneAuthProvider.credential(
         verificationId: verificationId, smsCode: smsCode);
 
     return _firebaseAuth.signInWithCredential(authCredential);
   }
 
-  Future<FirebaseUser> getUser() async {
-    var user = await _firebaseAuth.currentUser();
+  Future<User?> getUser() async {
+    var user = _firebaseAuth.currentUser;
     return user;
   }
 }
