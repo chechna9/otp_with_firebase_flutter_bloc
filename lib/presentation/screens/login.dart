@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mob_auth_fire_base/buisiness_logic/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:mob_auth_fire_base/buisiness_logic/blocs/login_bloc/login_bloc.dart';
 import 'package:mob_auth_fire_base/constants/constants.dart';
+import 'package:mob_auth_fire_base/presentation/screens/home.dart';
 import 'package:mob_auth_fire_base/presentation/widgets/inputField.dart';
 
-class SignUp extends StatelessWidget {
-  const SignUp({super.key});
+class Login extends StatelessWidget {
+  const Login({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +37,8 @@ class SignUp extends StatelessWidget {
 }
 
 final _formKey = GlobalKey<FormState>();
-final TextEditingController fnameCntrl = TextEditingController();
-final TextEditingController lnameCntrl = TextEditingController();
+
 final TextEditingController phoneCntrl = TextEditingController();
-final TextEditingController passwordCntrl = TextEditingController();
 
 class RegisterForm extends StatelessWidget {
   const RegisterForm({
@@ -50,7 +50,7 @@ class RegisterForm extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Sign Up',
+          'Login',
           style: TextStyle(
             fontSize: 40,
             color: myRed,
@@ -66,18 +66,6 @@ class RegisterForm extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomInputField(
-                labelText: 'First Name',
-                controller: fnameCntrl,
-                validator: (e) => e!.isEmpty ? 'required field' : null,
-              ),
-              const SizedBox(height: 15),
-              CustomInputField(
-                labelText: 'Last Name',
-                controller: lnameCntrl,
-                validator: (e) => e!.isEmpty ? 'required field' : null,
-              ),
-              const SizedBox(height: 15),
               //! we work here
               Container(
                 decoration: const BoxDecoration(boxShadow: [myBoxShadow]),
@@ -107,31 +95,20 @@ class RegisterForm extends StatelessWidget {
                   keyboardType: TextInputType.number,
                 ),
               ),
-              const SizedBox(height: 15),
-              CustomPasswordInput(
-                labelText: 'Password',
-                controller: passwordCntrl,
-                validator: (e) => e!.length < 6 ? 'at least 6 character' : null,
+              const SizedBox(
+                height: 50,
               ),
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "Already have an account?",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-              Row(
-                children: [
-                  const Flexible(child: SIGoogleButton()),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Flexible(
-                    child: SignUpButton(
-                      onPressed: () {},
-                    ),
-                  ),
-                ],
+              BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state) {
+                  // if (state is Unauthenticated) {
+                  //   return SignUpButton(
+                  //     onPressed: () {},
+                  //   );
+                  // } else if (state is Authenticated) {
+                  //   return const HomeScreen();
+                  // }
+                  return Text("unhandled state ${state}");
+                },
               ),
             ],
           ),
@@ -168,55 +145,11 @@ class SignUpButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Sign Up',
+            'Login',
             style: TextStyle(
               fontSize: 25,
               color: myWhite,
               fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SIGoogleButton extends StatelessWidget {
-  const SIGoogleButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
-        backgroundColor: myGrey,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
-        ),
-      ),
-      onPressed: () {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("coming soon"),
-        ));
-      },
-      child: Row(
-        children: const [
-          FlutterLogo(),
-          SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            child: Text(
-              'Sign up with Google',
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
             ),
           ),
         ],
