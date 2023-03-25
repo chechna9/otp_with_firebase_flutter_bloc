@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "48129211872",
+    "project_id": "mobile-auth-test-30bb0",
+    "storage_bucket": "mobile-auth-test-30bb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48129211872:android:d656a545c82146a450bf85",
+        "android_client_info": {
+          "package_name": "com.example.mob_auth_fire_base"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48129211872-spmqnkruqu3btutfs6a4iov8rgb2j4r9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuJDATA-E2DioirXXvB3QdVAKW-T38onQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48129211872-spmqnkruqu3btutfs6a4iov8rgb2j4r9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

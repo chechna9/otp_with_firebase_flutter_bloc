@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mob_auth_fire_base/presentation/router/app_router.dart';
 
-void main() {
+void main() async {
+  // loading env
+
   runApp(MyApp(
     appRouter: AppRouter(),
   ));
