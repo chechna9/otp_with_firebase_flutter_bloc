@@ -4,6 +4,7 @@ import 'package:mob_auth_fire_base/buisiness_logic/blocs/authentication_bloc/aut
 import 'package:mob_auth_fire_base/buisiness_logic/blocs/login_bloc/login_bloc.dart';
 import 'package:mob_auth_fire_base/constants/constants.dart';
 import 'package:mob_auth_fire_base/presentation/screens/home.dart';
+import 'package:mob_auth_fire_base/presentation/screens/verifying_otp.dart';
 import 'package:mob_auth_fire_base/presentation/widgets/inputField.dart';
 
 class Login extends StatelessWidget {
@@ -36,14 +37,25 @@ class Login extends StatelessWidget {
   }
 }
 
-final _formKey = GlobalKey<FormState>();
-
-final TextEditingController phoneCntrl = TextEditingController();
-
-class RegisterForm extends StatelessWidget {
+class RegisterForm extends StatefulWidget {
   const RegisterForm({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<RegisterForm> createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<RegisterForm> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController phoneCntrl = TextEditingController();
+  late bool hideShadow;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    hideShadow = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +80,8 @@ class RegisterForm extends StatelessWidget {
             children: [
               //! we work here
               Container(
-                decoration: const BoxDecoration(boxShadow: [myBoxShadow]),
+                decoration:
+                    BoxDecoration(boxShadow: hideShadow ? [] : [myBoxShadow]),
                 child: TextFormField(
                   controller: phoneCntrl,
                   decoration: InputDecoration(
@@ -93,21 +106,53 @@ class RegisterForm extends StatelessWidget {
                     ),
                   ),
                   keyboardType: TextInputType.number,
+                  validator: (value) => value!.length == 10
+                      ? null
+                      : 'incorrect number 10 digits needed',
                 ),
               ),
               const SizedBox(
                 height: 50,
               ),
-              BlocBuilder<LoginBloc, LoginState>(
+              BlocConsumer<LoginBloc, LoginState>(
+                listener: (context, state) {
+                  if (state is OtpSentState) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => VerifyingCode()),
+                    );
+                  }
+                },
                 builder: (context, state) {
-                  // if (state is Unauthenticated) {
-                  //   return SignUpButton(
-                  //     onPressed: () {},
-                  //   );
-                  // } else if (state is Authenticated) {
-                  //   return const HomeScreen();
-                  // }
-                  return Text("unhandled state ${state}");
+                  if (state is LoginInitial) {
+                    return SignUpButton(
+                      onPressed: () {
+                        // setState(() {
+                        //   hideShadow = true;
+                        // });
+                        // if (_formKey.currentState!.validate()) {
+                        //   setState(() {
+                        //     hideShadow = false;
+                        //   });
+                        //    context
+                        //     .read<LoginBloc>()
+                        //     .add(SendOtpEvent(phoneCntrl.text));
+                        // }
+                        // ? for testing
+                        try {
+                          context
+                              .read<LoginBloc>()
+                              .add(const SendOtpEvent("+213557042274"));
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                    );
+                  } else if (state is LoginLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is LoginError) {
+                    return Text("Error : ${state.errorMsg}");
+                  }
+                  return Text("unhandled state $state");
                 },
               ),
             ],

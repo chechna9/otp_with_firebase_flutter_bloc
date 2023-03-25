@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 import 'package:mob_auth_fire_base/repositeries/user_repository.dart';
 
@@ -28,6 +29,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         },
         (verificationId) {},
       );
+      emit.isDone;
     });
     on<OtpVerification>((event, emit) async {
       // verify the verification code entered by the user using Firebase Auth API

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mob_auth_fire_base/buisiness_logic/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:mob_auth_fire_base/buisiness_logic/blocs/bloc_observer.dart';
 import 'package:mob_auth_fire_base/buisiness_logic/blocs/login_bloc/login_bloc.dart';
 import 'package:mob_auth_fire_base/firebase_options.dart';
 
@@ -16,9 +17,14 @@ void main() async {
   // loading env
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(MyApp(
-    userRepository: UserRepository(),
-  ));
+  BlocOverrides.runZoned(
+    () {
+      runApp(MyApp(
+        userRepository: UserRepository(),
+      ));
+    },
+    blocObserver: MyGlobalObserver(),
+  );
 }
 
 class MyApp extends StatelessWidget {
