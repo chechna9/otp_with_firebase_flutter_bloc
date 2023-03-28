@@ -37,8 +37,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       (event, emit) async {
         emit(LoginLoading());
         try {
-          print(event.verificationId);
-          print(event.smsCode);
           UserCredential userCred = await userRepository.verifyAndLogin(
               event.verificationId, event.smsCode);
 

@@ -17,7 +17,8 @@ class AuthenticationBloc
     on<AppStarted>((event, emit) async {
       final bool hasToken = await userRepository.getUser() != null;
       if (hasToken) {
-        emit(Authenticated());
+        // emit(Authenticated());
+        emit(Unauthenticated());
       } else {
         emit(Unauthenticated());
       }

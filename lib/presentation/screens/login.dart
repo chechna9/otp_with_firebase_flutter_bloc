@@ -85,6 +85,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 child: TextFormField(
                   controller: phoneCntrl,
                   decoration: InputDecoration(
+                    prefix: const Text("+213"),
                     suffixIcon: Icon(
                       Icons.phone,
                       color: myDark,
@@ -106,9 +107,9 @@ class _RegisterFormState extends State<RegisterForm> {
                     ),
                   ),
                   keyboardType: TextInputType.number,
-                  validator: (value) => value!.length == 10
+                  validator: (value) => value!.length == 9
                       ? null
-                      : 'incorrect number 10 digits needed',
+                      : 'incorrect number, 9 digits needed',
                 ),
               ),
               const SizedBox(
@@ -137,11 +138,11 @@ class _RegisterFormState extends State<RegisterForm> {
                               .read<LoginBloc>()
                               .add(SendOtpEvent(phoneCntrl.text));
                         }
-                        // ? for testing
+
                         try {
                           context
                               .read<LoginBloc>()
-                              .add(const SendOtpEvent("+213557042274"));
+                              .add(SendOtpEvent("+213${phoneCntrl.text}"));
                         } catch (e) {
                           print(e);
                         }

@@ -10,56 +10,85 @@ class VerifyingCode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        child: BlocConsumer<LoginBloc, LoginState>(
-          listener: (context, state) {
-            if (state is LoginCompleted) {
-              context
-                  .read<AuthenticationBloc>()
-                  .add(LoggedIn(token: state.userCred.toString()));
-            }
-          },
-          builder: (context, state) {
-            if (state is OtpSentState) {
-              // state as OtpSentState;
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text(
-                    "Code sent in sms",
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  CustomInputField(
-                    controller: codeController,
-                    labelText: 'code',
-                    validator: (e) {},
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text("Resend code"),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          print("state verId ${state.verificationId}");
-                          context.read<LoginBloc>().add(
-                              OtpVerification(state.verificationId, "123456"));
-                        },
-                        child:
-                            const Text("Send Verification Verification number"),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            } else {
-              return Text("am in this state ${state.toString()}");
-            }
-          },
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Form(
+          child: BlocConsumer<LoginBloc, LoginState>(
+            listener: (context, state) {
+              if (state is LoginCompleted) {
+                context
+                    .read<AuthenticationBloc>()
+                    .add(LoggedIn(token: state.userCred.toString()));
+                Navigator.of(context).pop();
+              }
+            },
+            builder: (context, state) {
+              if ((state is OtpSentState)) {
+                // state as OtpSentState;
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Text(
+                      "Code sent in sms",
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    const TimeLeft(),
+                    CustomInputField(
+                      controller: codeController,
+                      labelText: 'code',
+                      validator: (e) {},
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text("Resend code"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // !todo: some verification to code entred by the user
+                            context.read<LoginBloc>().add(OtpVerification(
+                                state.verificationId, codeController.text));
+                          },
+                          child: const Text("Send Verification number"),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              } else {
+                return Center(
+                    child: Text("am in this state ${state.toString()}"));
+              }
+            },
+          ),
         ),
       ),
     );
+  }
+}
+
+class TimeLeft extends StatefulWidget {
+  const TimeLeft({
+    super.key,
+  });
+
+  @override
+  State<TimeLeft> createState() => _TimeLeftState();
+}
+
+class _TimeLeftState extends State<TimeLeft> {
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<Duration>(
+        duration: const Duration(seconds: 120),
+        tween: Tween(begin: const Duration(seconds: 120), end: Duration.zero),
+        builder: (BuildContext context, Duration value, Widget? child) {
+          return Text(
+            "Time left: ${value.inSeconds} s",
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          );
+        });
   }
 }
