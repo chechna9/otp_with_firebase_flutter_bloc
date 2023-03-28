@@ -126,17 +126,17 @@ class _RegisterFormState extends State<RegisterForm> {
                   if (state is LoginInitial) {
                     return SignUpButton(
                       onPressed: () {
-                        // setState(() {
-                        //   hideShadow = true;
-                        // });
-                        // if (_formKey.currentState!.validate()) {
-                        //   setState(() {
-                        //     hideShadow = false;
-                        //   });
-                        //    context
-                        //     .read<LoginBloc>()
-                        //     .add(SendOtpEvent(phoneCntrl.text));
-                        // }
+                        setState(() {
+                          hideShadow = true;
+                        });
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            hideShadow = false;
+                          });
+                          context
+                              .read<LoginBloc>()
+                              .add(SendOtpEvent(phoneCntrl.text));
+                        }
                         // ? for testing
                         try {
                           context

@@ -27,7 +27,7 @@ class UserRepository {
     AuthCredential authCredential = PhoneAuthProvider.credential(
         verificationId: verificationId, smsCode: smsCode);
 
-    return _firebaseAuth.signInWithCredential(authCredential);
+    return await _firebaseAuth.signInWithCredential(authCredential);
   }
 
   Future<User?> getUser() async {

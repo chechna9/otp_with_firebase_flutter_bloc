@@ -19,31 +19,38 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         event.phoneNumber,
         const Duration(seconds: 120),
         (error) {
-          emit(
-            LoginError(error.message ?? "Uknown Error"),
-          );
+          // emit(
+          //   LoginError(error.message ?? "Uknown Error"),
+          // );
         },
         (phoneAuthCredential) {},
         (verificationId, forceResendingToken) {
-          emit(OtpSentState(verificationId, forceResendingToken));
+          // can't emit directly here
+          // emit(OtpSentState(verificationId, forceResendingToken));
+          emittingOTPSentState(verificationId, forceResendingToken);
         },
         (verificationId) {},
       );
-      emit.isDone;
     });
-    on<OtpVerification>((event, emit) async {
-      // verify the verification code entered by the user using Firebase Auth API
-      try {
+
+    on<OtpVerification>(
+      (event, emit) async {
         emit(LoginLoading());
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: event.verificationId,
-          smsCode: event.smsCode,
-        );
-        await FirebaseAuth.instance.signInWithCredential(credential);
-        emit(LoginCompleted());
-      } catch (e) {
-        emit(LoginError(e.toString()));
-      }
-    });
+        try {
+          print(event.verificationId);
+          print(event.smsCode);
+          UserCredential userCred = await userRepository.verifyAndLogin(
+              event.verificationId, event.smsCode);
+
+          emit(LoginCompleted(userCred: userCred));
+        } catch (e) {
+          emit(LoginError(e.toString()));
+        }
+      },
+    );
+  }
+  // methods
+  void emittingOTPSentState(verificationId, forceResendingToken) {
+    emit(OtpSentState(verificationId, forceResendingToken));
   }
 }

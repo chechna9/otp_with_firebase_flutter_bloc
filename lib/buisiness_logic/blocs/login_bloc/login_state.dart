@@ -21,6 +21,8 @@ class OtpSentState extends LoginState {
 
 class LoginCompleted extends LoginState {
   // when verification is checked
+  final UserCredential userCred;
+  const LoginCompleted({required this.userCred});
 }
 
 class LoginError extends LoginState {
