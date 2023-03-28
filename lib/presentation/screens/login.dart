@@ -136,15 +136,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           });
                           context
                               .read<LoginBloc>()
-                              .add(SendOtpEvent(phoneCntrl.text));
-                        }
-
-                        try {
-                          context
-                              .read<LoginBloc>()
                               .add(SendOtpEvent("+213${phoneCntrl.text}"));
-                        } catch (e) {
-                          print(e);
                         }
                       },
                     );

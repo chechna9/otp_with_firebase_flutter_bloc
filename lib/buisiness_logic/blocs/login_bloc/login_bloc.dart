@@ -10,18 +10,21 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   late UserRepository _userRepository;
+
   LoginBloc(UserRepository userRepository) : super(LoginInitial()) {
     _userRepository = userRepository;
+
     on<SendOtpEvent>((event, emit) async {
       emit(LoginLoading());
       // calling the firebase api
+      debugPrint("numero:${event.phoneNumber}.");
       await _userRepository.sendOtp(
         event.phoneNumber,
         const Duration(seconds: 120),
         (error) {
-          // emit(
-          //   LoginError(error.message ?? "Uknown Error"),
-          // );
+          // can't emit directly here
+          // LoginError(error.message ?? "");
+          emittingLoginError(error.message);
         },
         (phoneAuthCredential) {},
         (verificationId, forceResendingToken) {
@@ -47,8 +50,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       },
     );
   }
-  // methods
   void emittingOTPSentState(verificationId, forceResendingToken) {
     emit(OtpSentState(verificationId, forceResendingToken));
+  }
+
+  void emittingLoginError(error) {
+    emit(LoginError(error));
   }
 }
